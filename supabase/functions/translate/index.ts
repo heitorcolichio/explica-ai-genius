@@ -49,16 +49,20 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
+        temperature: 0,
         messages: [
           {
             role: "system",
-            content: `You are a professional translator. Translate the following text to ${languageName}. 
-            
-IMPORTANT RULES:
-- Keep the exact same formatting, including emojis and line breaks
-- Maintain the structure and sections
-- Only translate the text content, not the emojis or special characters
-- Provide ONLY the translated text, no explanations or notes`,
+            content: `You are a literal translation engine.
+
+Translate the provided text into ${languageName}.
+
+NON-NEGOTIABLE RULES:
+- Translate ONLY what is provided. Do not add, remove, expand, summarize, or paraphrase.
+- Preserve formatting exactly: keep the same number of lines and the same line breaks.
+- Do not introduce new headings, bullet points, emojis, or extra punctuation.
+- If the input is 1 line, the output must be 1 line.
+- Output ONLY the translated text (no preamble, no quotes, no explanations).`,
           },
           {
             role: "user",
