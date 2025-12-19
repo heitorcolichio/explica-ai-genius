@@ -2,12 +2,15 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Copy, Check, RefreshCw, Globe } from "lucide-react";
 import { toast } from "sonner";
+import { SuggestedQuestions } from "./SuggestedQuestions";
 
 interface AnalysisResultProps {
   userName: string;
   result: string;
+  quickSummary: string;
   imagePreview: string;
   onReset: () => void;
+  onFollowUp: (question: string) => void;
 }
 
 const LANGUAGES = [
@@ -18,7 +21,7 @@ const LANGUAGES = [
   { code: "de", label: "Deutsch" },
 ];
 
-export function AnalysisResult({ userName, result, imagePreview, onReset }: AnalysisResultProps) {
+export function AnalysisResult({ userName, result, quickSummary, imagePreview, onReset, onFollowUp }: AnalysisResultProps) {
   const [copied, setCopied] = useState(false);
   const [translatedResult, setTranslatedResult] = useState<string | null>(null);
   const [isTranslating, setIsTranslating] = useState(false);
@@ -40,6 +43,8 @@ export function AnalysisResult({ userName, result, imagePreview, onReset }: Anal
     
     setIsTranslating(true);
     setSelectedLanguage(langCode);
+    // Reset translated result before new translation to avoid mixing languages
+    setTranslatedResult(null);
     
     try {
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/translate`, {
@@ -49,6 +54,7 @@ export function AnalysisResult({ userName, result, imagePreview, onReset }: Anal
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
         body: JSON.stringify({
+          // Always translate from original result, not from previously translated text
           text: result,
           targetLanguage: langCode,
         }),
@@ -116,6 +122,14 @@ export function AnalysisResult({ userName, result, imagePreview, onReset }: Anal
           )}
         </div>
 
+        {/* Quick Summary */}
+        {quickSummary && (
+          <div className="border-2 border-primary/30 bg-primary/5 p-4">
+            <p className="text-sm font-medium text-primary mb-1">📋 Resumo rápido</p>
+            <p className="text-sm">{quickSummary}</p>
+          </div>
+        )}
+
         <div className="border-2 border-foreground bg-card">
           <div className="border-b-2 border-foreground p-4 flex items-center justify-between">
             <h2 className="font-bold text-lg">Resultado da Análise</h2>
@@ -126,6 +140,9 @@ export function AnalysisResult({ userName, result, imagePreview, onReset }: Anal
             </div>
           </div>
         </div>
+
+        {/* Suggested Questions */}
+        <SuggestedQuestions onQuestionClick={onFollowUp} />
 
         <div className="flex flex-col sm:flex-row gap-4">
           <Button
