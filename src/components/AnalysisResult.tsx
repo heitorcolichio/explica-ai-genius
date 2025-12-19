@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Copy, Check, RefreshCw, Globe } from "lucide-react";
 import { toast } from "sonner";
@@ -29,6 +29,25 @@ export function AnalysisResult({ userName, result, quickSummary, imagePreview, o
   const [isTranslating, setIsTranslating] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
 
+  function inferBaseLanguage(text: string): string {
+    if (text.includes("📌 Contexto da imagem")) return "pt";
+    if (text.includes("📌 Image Context")) return "en";
+    if (text.includes("📌 Contexte de l'image")) return "fr";
+    if (text.includes("📌 Contexto de la imagen")) return "es";
+    if (text.includes("📌 Bildkontext") || text.includes("📌 Bildkontext")) return "de";
+    return "pt";
+  }
+
+  const baseLanguageRef = useRef<string>(inferBaseLanguage(result));
+
+  // When a new analysis comes in, treat it as the new "original" and reset translations.
+  useEffect(() => {
+    baseLanguageRef.current = inferBaseLanguage(result);
+    setSelectedLanguage(null);
+    setTranslatedResult(null);
+    setTranslatedSummary(null);
+  }, [result, quickSummary]);
+
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(translatedResult || result);
@@ -41,14 +60,24 @@ export function AnalysisResult({ userName, result, quickSummary, imagePreview, o
   };
 
   const handleTranslate = async (langCode: string) => {
+    const baseLang = baseLanguageRef.current;
+
+    // If user selects the original analysis language, just revert to original.
+    if (langCode === baseLang) {
+      setSelectedLanguage(null);
+      setTranslatedResult(null);
+      setTranslatedSummary(null);
+      return;
+    }
+
     if (langCode === selectedLanguage) return;
-    
+
     setIsTranslating(true);
     setSelectedLanguage(langCode);
     // Reset translated results before new translation
     setTranslatedResult(null);
     setTranslatedSummary(null);
-    
+
     try {
       // Translate both result and summary in parallel
       const [resultResponse, summaryResponse] = await Promise.all([
@@ -63,17 +92,19 @@ export function AnalysisResult({ userName, result, quickSummary, imagePreview, o
             targetLanguage: langCode,
           }),
         }),
-        quickSummary ? fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/translate`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({
-            text: quickSummary,
-            targetLanguage: langCode,
-          }),
-        }) : Promise.resolve(null),
+        quickSummary
+          ? fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/translate`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+              },
+              body: JSON.stringify({
+                text: quickSummary,
+                targetLanguage: langCode,
+              }),
+            })
+          : Promise.resolve(null),
       ]);
 
       if (!resultResponse.ok) throw new Error("Translation failed");
