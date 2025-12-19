@@ -2,14 +2,19 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Upload, Image as ImageIcon, X } from "lucide-react";
+import { DetailLevelSelector } from "./DetailLevelSelector";
+
+type DetailLevel = "short" | "standard" | "detailed";
 
 interface ImageUploadProps {
   userName: string;
-  onAnalyze: (image: File, context?: string) => void;
+  onAnalyze: (image: File, context?: string, level?: DetailLevel) => void;
   isLoading: boolean;
+  detailLevel: DetailLevel;
+  onDetailLevelChange: (level: DetailLevel) => void;
 }
 
-export function ImageUpload({ userName, onAnalyze, isLoading }: ImageUploadProps) {
+export function ImageUpload({ userName, onAnalyze, isLoading, detailLevel, onDetailLevelChange }: ImageUploadProps) {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [context, setContext] = useState("");
@@ -46,7 +51,7 @@ export function ImageUpload({ userName, onAnalyze, isLoading }: ImageUploadProps
 
   const handleSubmit = () => {
     if (selectedImage) {
-      onAnalyze(selectedImage, context || undefined);
+      onAnalyze(selectedImage, context || undefined, detailLevel);
     }
   };
 
@@ -63,6 +68,9 @@ export function ImageUpload({ userName, onAnalyze, isLoading }: ImageUploadProps
         </header>
 
         <div className="space-y-6">
+          {/* Detail Level Selector */}
+          <DetailLevelSelector value={detailLevel} onChange={onDetailLevelChange} />
+
           <div className="space-y-3">
             <label className="text-sm font-medium block">
               O que você quer saber dessa imagem? (opcional)

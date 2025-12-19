@@ -5,6 +5,12 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const DETAIL_LEVEL_INSTRUCTIONS: Record<string, string> = {
+  short: `Seja MUITO conciso. Cada seção deve ter no máximo 1-2 frases curtas.`,
+  standard: `Forneça uma análise equilibrada. Cada seção deve ter 2-4 frases.`,
+  detailed: `Forneça uma análise completa e detalhada. Explore cada seção em profundidade com explicações extensas.`,
+};
+
 const SYSTEM_PROMPT = `Você é um assistente especializado em análise de imagens. Sua tarefa é analisar imagens enviadas pelo usuário e fornecer uma análise completa, organizada e confiável.
 
 IMPORTANTE: Você DEVE seguir EXATAMENTE este formato na sua resposta:
@@ -40,7 +46,7 @@ serve(async (req) => {
   }
 
   try {
-    const { imageBase64, mimeType, userContext } = await req.json();
+    const { imageBase64, mimeType, userContext, detailLevel = "standard", previousAnalysis } = await req.json();
 
     if (!imageBase64) {
       return new Response(
@@ -58,12 +64,17 @@ serve(async (req) => {
       );
     }
 
-    let userMessage = "Analise esta imagem seguindo o formato especificado.";
-    if (userContext) {
-      userMessage = `O usuário quer saber: "${userContext}"\n\nAnalise esta imagem considerando essa solicitação, mas ainda seguindo o formato completo especificado.`;
+    const detailInstruction = DETAIL_LEVEL_INSTRUCTIONS[detailLevel] || DETAIL_LEVEL_INSTRUCTIONS.standard;
+
+    let userMessage = `Analise esta imagem seguindo o formato especificado.\n\n${detailInstruction}`;
+    
+    if (previousAnalysis) {
+      userMessage = `Análise anterior:\n${previousAnalysis}\n\nPergunta do usuário: "${userContext}"\n\nResponda a pergunta do usuário baseado na análise anterior e na imagem. Mantenha o mesmo formato estruturado.\n\n${detailInstruction}`;
+    } else if (userContext) {
+      userMessage = `O usuário quer saber: "${userContext}"\n\nAnalise esta imagem considerando essa solicitação, mas ainda seguindo o formato completo especificado.\n\n${detailInstruction}`;
     }
 
-    console.log("Calling Lovable AI for image analysis...");
+    console.log("Calling Lovable AI for image analysis with detail level:", detailLevel);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -125,10 +136,22 @@ serve(async (req) => {
       );
     }
 
+    // Generate quick summary (first 2-3 sentences of the context section)
+    let quickSummary = "";
+    const contextMatch = analysisResult.match(/📌 Contexto da imagem\n([^\n📝]+)/);
+    if (contextMatch) {
+      const contextText = contextMatch[1].trim();
+      const sentences = contextText.split(/[.!?]+/).filter(Boolean).slice(0, 2);
+      quickSummary = sentences.join(". ").trim();
+      if (quickSummary && !quickSummary.endsWith(".")) {
+        quickSummary += ".";
+      }
+    }
+
     console.log("Image analysis completed successfully");
 
     return new Response(
-      JSON.stringify({ analysis: analysisResult }),
+      JSON.stringify({ analysis: analysisResult, quickSummary }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
