@@ -11,6 +11,7 @@ interface AnalysisResultProps {
   imagePreview: string;
   onReset: () => void;
   onFollowUp: (question: string) => void;
+  isLoadingFollowUp?: boolean;
 }
 
 const LANGUAGES = [
@@ -21,9 +22,10 @@ const LANGUAGES = [
   { code: "de", label: "Deutsch" },
 ];
 
-export function AnalysisResult({ userName, result, quickSummary, imagePreview, onReset, onFollowUp }: AnalysisResultProps) {
+export function AnalysisResult({ userName, result, quickSummary, imagePreview, onReset, onFollowUp, isLoadingFollowUp }: AnalysisResultProps) {
   const [copied, setCopied] = useState(false);
   const [translatedResult, setTranslatedResult] = useState<string | null>(null);
+  const [translatedSummary, setTranslatedSummary] = useState<string | null>(null);
   const [isTranslating, setIsTranslating] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
 
@@ -43,27 +45,46 @@ export function AnalysisResult({ userName, result, quickSummary, imagePreview, o
     
     setIsTranslating(true);
     setSelectedLanguage(langCode);
-    // Reset translated result before new translation to avoid mixing languages
+    // Reset translated results before new translation
     setTranslatedResult(null);
+    setTranslatedSummary(null);
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/translate`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({
-          // Always translate from original result, not from previously translated text
-          text: result,
-          targetLanguage: langCode,
+      // Translate both result and summary in parallel
+      const [resultResponse, summaryResponse] = await Promise.all([
+        fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/translate`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({
+            text: result,
+            targetLanguage: langCode,
+          }),
         }),
-      });
+        quickSummary ? fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/translate`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({
+            text: quickSummary,
+            targetLanguage: langCode,
+          }),
+        }) : Promise.resolve(null),
+      ]);
 
-      if (!response.ok) throw new Error("Translation failed");
+      if (!resultResponse.ok) throw new Error("Translation failed");
 
-      const data = await response.json();
-      setTranslatedResult(data.translatedText);
+      const resultData = await resultResponse.json();
+      setTranslatedResult(resultData.translatedText);
+
+      if (summaryResponse && summaryResponse.ok) {
+        const summaryData = await summaryResponse.json();
+        setTranslatedSummary(summaryData.translatedText);
+      }
     } catch {
       toast.error("Erro ao traduzir");
       setSelectedLanguage(null);
@@ -73,6 +94,7 @@ export function AnalysisResult({ userName, result, quickSummary, imagePreview, o
   };
 
   const displayResult = translatedResult || result;
+  const displaySummary = translatedSummary || quickSummary;
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
@@ -123,10 +145,10 @@ export function AnalysisResult({ userName, result, quickSummary, imagePreview, o
         </div>
 
         {/* Quick Summary */}
-        {quickSummary && (
+        {displaySummary && (
           <div className="border-2 border-primary/30 bg-primary/5 p-4">
             <p className="text-sm font-medium text-primary mb-1">📋 Resumo rápido</p>
-            <p className="text-sm">{quickSummary}</p>
+            <p className="text-sm">{displaySummary}</p>
           </div>
         )}
 
@@ -142,7 +164,7 @@ export function AnalysisResult({ userName, result, quickSummary, imagePreview, o
         </div>
 
         {/* Suggested Questions */}
-        <SuggestedQuestions onQuestionClick={onFollowUp} />
+        <SuggestedQuestions onQuestionClick={onFollowUp} isLoading={isLoadingFollowUp} />
 
         <div className="flex flex-col sm:flex-row gap-4">
           <Button

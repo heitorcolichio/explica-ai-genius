@@ -162,6 +162,7 @@ const Index = () => {
           imagePreview={imagePreview}
           onReset={handleReset}
           onFollowUp={handleFollowUp}
+          isLoadingFollowUp={isLoading}
         />
       )}
     </>
