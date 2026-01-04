@@ -1,73 +1,186 @@
-# Welcome to your Lovable project
+# ExplicaAí
+### IA para leitura, interpretação, resumos e traduções de imagens
 
-## Project info teste
+---
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## 📌 Sobre o Projeto
 
-## How can I edit this code?
+**ExplicaAí** é um aplicativo web baseado em Inteligência Artificial que realiza a análise completa de imagens enviadas pelo usuário, retornando informações organizadas sobre o contexto da imagem, texto identificado (OCR), interpretação do conteúdo, possíveis usos e observações relevantes.
 
-There are several ways of editing your application.
+O projeto foi desenvolvido como um **MVP funcional**, com foco em simplicidade, clareza e aplicabilidade prática, utilizando a plataforma Lovable para construção e publicação.
 
-**Use Lovable**
+🔗 Aplicação publicada:  
+https://explica-ai-genius.lovable.app
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🎓 Contexto Acadêmico
 
-**Use your preferred IDE**
+Este projeto foi desenvolvido como parte das atividades do **Projeto Solidário**, vinculado à **Universidade Federal de São Carlos (UFSCar)**, com o objetivo de **complementação de horas acadêmicas**.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+O projeto será enviado à coordenação do curso como documentação oficial, conforme solicitado na disciplina.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+**Orientador:**  
+Prof. Emerson Carlos Pedrino  
 
-Follow these steps:
+**Aluno:**  
+Heitor P. Colichio  
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 💡 Motivação
 
-# Step 3: Install the necessary dependencies.
-npm i
+A motivação do projeto surgiu da necessidade de compreender rapidamente o conteúdo de imagens, especialmente:
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+- Prints de tela  
+- Documentos  
+- Avisos  
+- Erros de sistema  
+- Imagens informativas em geral  
 
-**Edit a file directly in GitHub**
+Muitas imagens contêm informações importantes que não são imediatamente claras. O ExplicaAí utiliza IA para interpretar essas imagens e fornecer explicações diretas, organizadas e confiáveis, sem que o usuário precise explicar previamente o que deseja fazer com a imagem.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
+## 🎯 Objetivos do Aplicativo
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+O ExplicaAí tem como objetivos principais:
 
-## What technologies are used for this project?
+- Receber qualquer tipo de imagem enviada pelo usuário  
+- Identificar automaticamente o contexto da imagem  
+- Extrair todo o texto presente na imagem (OCR)  
+- Explicar o significado do conteúdo de forma clara e acessível  
+- Apresentar possíveis usos ou aplicações do conteúdo  
+- Exibir observações relevantes e referências quando aplicável  
 
-This project is built with:
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 👥 Público-Alvo
 
-## How can I deploy this project?
+O aplicativo pode ser utilizado por:
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+- Estudantes  
+- Professores  
+- Pessoas com dificuldade de leitura  
+- Profissionais de diferentes áreas  
+- Usuários que precisam entender documentos, avisos ou erros técnicos  
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+## 🧱 Tecnologias Utilizadas
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- Plataforma **Lovable**  
+- Inteligência Artificial para interpretação de imagens  
+- OCR (Reconhecimento Óptico de Caracteres)  
+- Interface web responsiva (desktop e mobile)  
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Não foi necessário backend próprio ou domínio personalizado, pois o Lovable fornece hospedagem automática.
+
+---
+
+## 🔄 Estrutura e Fluxo do Aplicativo
+
+O fluxo do aplicativo foi projetado para ser simples e intuitivo:
+
+1. O usuário informa seu nome  
+2. O app exibe uma saudação personalizada  
+3. O usuário pode informar o que deseja saber sobre a imagem (campo opcional)  
+4. O usuário realiza o upload da imagem  
+5. A IA processa a imagem  
+6. O resultado é exibido de forma organizada em seções  
+
+---
+
+## 🖥️ Interface do Usuário (UI/UX)
+
+O design do ExplicaAí segue os seguintes princípios:
+
+- Interface clean e minimalista  
+- Tipografia legível  
+- Layout centralizado  
+- Facilidade de uso  
+- Pouca poluição visual  
+
+O objetivo da interface é permitir o uso imediato do aplicativo, sem necessidade de instruções complexas.
+
+---
+
+## ⚙️ Funcionalidades Implementadas
+
+- Upload de qualquer tipo de imagem  
+- Identificação automática do contexto da imagem  
+- OCR completo do texto presente  
+- Explicação detalhada e organizada  
+- Campo opcional para direcionar a análise  
+- Botão para copiar todo o resultado  
+- Botão para analisar outra imagem  
+- Opção de tradução do resultado final  
+- Perguntas sugeridas para complementar a análise  
+- Aviso de privacidade informando que as imagens não são armazenadas  
+
+---
+
+## 🧠 Estrutura da Resposta da IA
+
+As respostas geradas seguem sempre uma estrutura fixa:
+
+- Contexto da imagem  
+- Texto identificado na imagem (OCR)  
+- Explicação e interpretação  
+- Possíveis usos ou aplicações  
+- Observações relevantes  
+- Fontes ou referências (quando aplicável)  
+
+Essa organização garante clareza e facilita a leitura.
+
+---
+
+## ▶️ Como Utilizar o Projeto
+
+1. Acesse o link do aplicativo  
+2. Informe seu nome na tela inicial  
+3. (Opcional) Descreva o que deseja saber sobre a imagem  
+4. Envie uma imagem para análise  
+5. Aguarde o processamento  
+6. Leia o resultado organizado exibido na tela  
+
+---
+
+## 🔁 Replicabilidade do Projeto
+
+O projeto foi desenvolvido utilizando a plataforma Lovable, permitindo que outros usuários possam:
+
+- Replicar o aplicativo criando um projeto semelhante  
+- Utilizar a estrutura de fluxo e o prompt definidos  
+- Evoluir o projeto com novas funcionalidades  
+
+Toda a lógica de funcionamento está documentada neste repositório e no documento enviado à coordenação.
+
+---
+
+## 🌐 Hospedagem
+
+O aplicativo está hospedado na infraestrutura do Lovable e permanece disponível enquanto o projeto existir na conta do desenvolvedor, sem prazo automático de expiração.
+
+---
+
+## 📈 Possibilidades de Expansão
+
+- Modo acadêmico ou profissional  
+- Resumo automático do conteúdo  
+- Melhorias visuais  
+- Integrações com outras plataformas  
+
+---
+
+## 📄 Licença e Uso
+
+Este projeto possui finalidade **acadêmica**, podendo ser utilizado como base para estudos, demonstrações e trabalhos relacionados à disciplina, desde que sejam mantidos os devidos créditos ao autor e ao orientador.
+
+---
+
+## 🙏 Agradecimentos
+
+Agradeço ao **Professor Emerson Carlos Pedrino** pela orientação, suporte e acompanhamento durante o desenvolvimento do projeto.
+
+---
