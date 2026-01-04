@@ -16,12 +16,12 @@ https://explica-ai-genius.lovable.app
 
 ## 🎓 Contexto Acadêmico
 
-Este projeto foi desenvolvido como parte das atividades do **Projeto Solidário**, vinculado à **Universidade Federal de São Carlos (UFSCar)**, com o objetivo de **complementação de horas acadêmicas**.
+Este projeto foi desenvolvido vinculado à **Universidade Federal de São Carlos (UFSCar)**, com o objetivo de **complementação de horas acadêmicas**, para que assim, eu me formasse. 
 
 O projeto será enviado à coordenação do curso como documentação oficial, conforme solicitado na disciplina.
 
 **Orientador:**  
-Prof. Emerson Carlos Pedrino  
+Prof. Dr. Emerson Carlos Pedrino  
 
 **Aluno:**  
 Heitor P. Colichio  
