@@ -16,7 +16,7 @@ https://explica-ai-genius.lovable.app
 
 ## 🎓 Contexto Acadêmico
 
-Este projeto foi desenvolvido vinculado à **Universidade Federal de São Carlos (UFSCar)**, com o objetivo de **complementação de horas acadêmicas**, para que assim, eu me formasse. 
+Este projeto foi desenvolvido vinculado à **Universidade Federal de São Carlos (UFSCar)**, com o objetivo de **complementação de horas acadêmicas**.
 
 O projeto será enviado à coordenação do curso como documentação oficial, conforme solicitado na disciplina.
 
@@ -38,7 +38,7 @@ A motivação do projeto surgiu da necessidade de compreender rapidamente o cont
 - Erros de sistema  
 - Imagens informativas em geral  
 
-Muitas imagens contêm informações importantes que não são imediatamente claras. O ExplicaAí utiliza IA para interpretar essas imagens e fornecer explicações diretas, organizadas e confiáveis, sem que o usuário precise explicar previamente o que deseja fazer com a imagem.
+Muitas imagens contêm informações importantes que não são imediatamente claras. O **ExplicaAí** utiliza IA para interpretar essas imagens e fornecer explicações diretas, organizadas e confiáveis, sem que o usuário precise explicar previamente o que deseja fazer com a imagem.
 
 ---
 
@@ -67,14 +67,21 @@ O aplicativo pode ser utilizado por:
 
 ---
 
-## 🧱 Tecnologias Utilizadas
+## 🧱 Stack Tecnológica
 
-- Plataforma **Lovable**  
-- Inteligência Artificial para interpretação de imagens  
-- OCR (Reconhecimento Óptico de Caracteres)  
-- Interface web responsiva (desktop e mobile)  
+### Frontend
+- **React 18 + TypeScript** – Interface reativa com tipagem estática  
+- **Vite** – Build tool rápido para desenvolvimento  
+- **Tailwind CSS** – Estilização utility-first  
+- **shadcn/ui** – Componentes acessíveis e customizáveis  
 
-Não foi necessário backend próprio ou domínio personalizado, pois o Lovable fornece hospedagem automática.
+### Backend
+- **Lovable Cloud (Supabase)** – Backend serverless  
+- **Deno Edge Functions** – Processamento de requisições  
+- **Lovable AI Gateway** – Acesso aos modelos de IA  
+
+### Modelo de IA
+- **Google Gemini 2.5 Flash** – Modelo multimodal (texto + imagem)
 
 ---
 
@@ -101,37 +108,37 @@ O design do ExplicaAí segue os seguintes princípios:
 - Facilidade de uso  
 - Pouca poluição visual  
 
-O objetivo da interface é permitir o uso imediato do aplicativo, sem necessidade de instruções complexas.
+O objetivo é permitir uso imediato, sem necessidade de instruções complexas.
 
 ---
 
 ## ⚙️ Funcionalidades Implementadas
 
 - Upload de qualquer tipo de imagem  
-- Identificação automática do contexto da imagem  
-- OCR completo do texto presente  
-- Explicação detalhada e organizada  
+- Identificação automática do contexto  
+- OCR completo  
+- Análise estruturada em 6 seções  
 - Campo opcional para direcionar a análise  
-- Botão para copiar todo o resultado  
+- 3 níveis de detalhamento (Resumido, Padrão, Detalhado)  
+- Resumo rápido no topo dos resultados  
+- Tradução para 5 idiomas com reversão perfeita  
+- Perguntas sugeridas para follow-up  
+- Botão para copiar o resultado  
 - Botão para analisar outra imagem  
-- Opção de tradução do resultado final  
-- Perguntas sugeridas para complementar a análise  
-- Aviso de privacidade informando que as imagens não são armazenadas  
+- Aviso de privacidade (imagens não armazenadas)  
 
 ---
 
 ## 🧠 Estrutura da Resposta da IA
 
-As respostas geradas seguem sempre uma estrutura fixa:
+A resposta da IA segue sempre esta estrutura fixa:
 
-- Contexto da imagem  
-- Texto identificado na imagem (OCR)  
-- Explicação e interpretação  
-- Possíveis usos ou aplicações  
-- Observações relevantes  
-- Fontes ou referências (quando aplicável)  
-
-Essa organização garante clareza e facilita a leitura.
+- 📌 Contexto da imagem  
+- 📝 Texto identificado (OCR)  
+- 💡 Explicação e interpretação  
+- 🎯 Possíveis usos ou aplicações  
+- ⚠️ Observações relevantes  
+- 📚 Fontes confiáveis (quando aplicável)  
 
 ---
 
@@ -146,41 +153,113 @@ Essa organização garante clareza e facilita a leitura.
 
 ---
 
-## 🔁 Replicabilidade do Projeto
+## 🧭 Passo a Passo do Desenvolvimento do Projeto
 
-O projeto foi desenvolvido utilizando a plataforma Lovable, permitindo que outros usuários possam:
+### Fase 1 – MVP
+- Setup do projeto com Vite + React + TypeScript  
+- Configuração do Tailwind CSS e shadcn/ui  
+- Componente inicial de upload de imagem  
+- Edge Function inicial para análise  
 
-- Replicar o aplicativo criando um projeto semelhante  
-- Utilizar a estrutura de fluxo e o prompt definidos  
-- Evoluir o projeto com novas funcionalidades  
+### Fase 2 – Estruturação da Análise
+- Definição das 6 seções obrigatórias  
+- Criação do prompt de sistema estruturado  
+- Componente de exibição dos resultados  
 
-Toda a lógica de funcionamento está documentada neste repositório e no documento enviado à coordenação.
+### Fase 3 – Experiência do Usuário
+- Fluxo de identificação por nome  
+- Campo opcional para foco da análise  
+- Implementação dos níveis de detalhamento  
+
+### Fase 4 – Resumo Rápido
+- Extração automática do contexto  
+- Exibição destacada no topo dos resultados  
+
+### Fase 5 – Sistema de Tradução
+- Edge Function dedicada à tradução  
+- Seleção de idiomas  
+- Tradução literal com reversão ao idioma original  
+
+### Fase 6 – Refinamentos
+- Correção de bugs  
+- Ajustes finos nos prompts  
+- Perguntas sugeridas  
+- Polimento visual e UX  
 
 ---
 
-## 🌐 Hospedagem
+## 🔁 Como Replicar o Projeto
 
+Existem **duas formas principais** de replicar este projeto.
+
+---
+
+### 🔹 Opção A – Replicação via GitHub (Desenvolvimento Local)
+
+#### Pré-requisitos
+- Node.js 18+  
+- Git  
+- Conta no Supabase  
+
+#### Passos
+
+```bash
+
+Criar arquivo .env na raiz do projeto:
+
+VITE_SUPABASE_URL=sua_url_do_supabase
+VITE_SUPABASE_PUBLISHABLE_KEY=sua_chave_publica
+git clone https://github.com/seu-usuario/nome-do-repositorio.git
+cd nome-do-repositorio
+npm install
+
+Configurar o Supabase:
+
+Criar projeto no Supabase
+Fazer deploy das Edge Functions em supabase/functions/
+Configurar secrets de API
+Executar localmente:
+npm run dev
+
+Build de produção:
+npm run build
+
+Opção B – Remix via Lovable (Recomendado)
+
+Acessar o projeto original no Lovable
+Clicar em Settings → Remix this project
+O Lovable cria uma cópia completa do projeto
+Backend e Edge Functions já vêm configurados
+Publicar com um clique
+
+
+🔐 Considerações de Privacidade
+As imagens não são armazenadas
+
+Processamento ocorre apenas em memória
+
+Nome do usuário salvo apenas no localStorage
+
+Aplicação stateless (sem banco de usuários)
+
+🌐 Hospedagem
 O aplicativo está hospedado na infraestrutura do Lovable e permanece disponível enquanto o projeto existir na conta do desenvolvedor, sem prazo automático de expiração.
 
----
+📈 Possibilidades de Expansão
+Modo acadêmico ou profissional
 
-## 📈 Possibilidades de Expansão
+Comparação entre imagens
 
-- Modo acadêmico ou profissional  
-- Resumo automático do conteúdo  
-- Melhorias visuais  
-- Integrações com outras plataformas  
+Exportação em PDF
 
----
+Novos idiomas
 
-## 📄 Licença e Uso
+Melhorias visuais
 
-Este projeto possui finalidade **acadêmica**, podendo ser utilizado como base para estudos, demonstrações e trabalhos relacionados à disciplina, desde que sejam mantidos os devidos créditos ao autor e ao orientador.
+📄 Licença e Uso
+Este projeto possui finalidade acadêmica, podendo ser utilizado como base para estudos, demonstrações e trabalhos relacionados à disciplina, desde que mantidos os créditos ao autor e ao orientador.
 
----
+🙏 Agradecimentos
+Agradeço ao Professor Dr. Emerson Carlos Pedrino pela orientação, suporte e acompanhamento durante o desenvolvimento do projeto.
 
-## 🙏 Agradecimentos
 
-Agradeço ao **Professor Emerson Carlos Pedrino** pela orientação, suporte e acompanhamento durante o desenvolvimento do projeto.
-
----
